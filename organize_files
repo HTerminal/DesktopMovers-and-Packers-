@@ -1,0 +1,68 @@
+import os
+import shutil
+
+# Define folder names based on file types
+folder_map = {
+    'pdf': 'PDFs',
+    'jpg': 'Images',
+    'jpeg': 'Images',
+    'png': 'Images',
+    'doc': 'Documents',
+    'docx': 'Documents',
+    'txt': 'Text Files',
+    'mp3': 'Music',
+    'mp4': 'Videos',
+    'avi': 'Videos',
+    'xlsx': 'Excel Files',
+    'csv': 'Excel Files',
+    'zip': 'Archives',
+    'rar': 'Archives',
+    'py': 'Pythons',
+    'ino': 'Arduino',
+    'tflite': 'Models',
+    'wav': 'Music',
+    'sql': 'Database',
+    'apk': 'APK',
+    'html': 'HTML',
+    'php': 'HTML',
+    'ovn': 'HTML',
+    'ppk': 'KEYs',
+    'sh': 'Codes',
+    'mov': 'Videos'
+}
+
+def create_and_move(file, folder_name):
+    destination = os.path.join(folder_name, file)
+    
+    # Check if the destination folder exists; create if not
+    if not os.path.exists(folder_name):
+        os.makedirs(folder_name)
+
+    # If the file already exists in the destination, remove it to overwrite
+    if os.path.exists(destination):
+        os.remove(destination)
+    
+    # Move the file
+    shutil.move(file, destination)
+    print(f"Moved {file} to {folder_name}")
+
+def move_files_to_folders(directory):
+    for file in os.listdir(directory):
+        # Skip directories
+        if os.path.isdir(file):
+            continue
+        
+        # Get file extension
+        file_extension = file.split('.')[-1].lower()
+        
+        # Check if the file type is known and in our folder_map
+        if file_extension in folder_map:
+            folder_name = folder_map[file_extension]
+            create_and_move(file, folder_name)
+        # Optionally handle unknown file types:
+        # else:
+        #     create_and_move(file, 'Others')
+
+if __name__ == "__main__":
+    current_directory = os.getcwd()
+    move_files_to_folders(current_directory)
